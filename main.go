@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -51,9 +52,14 @@ func main() {
 		}
 	}
 	Path := ""
+	Scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("网盘路径（按回车确认，留空时为根目录）：")
-		fmt.Scanln(&Path)
+		if Scanner.Scan() {
+			Path = Scanner.Text()
+		} else {
+			return
+		}
 		if Path == "" {
 			Path = "/"
 		}
@@ -69,7 +75,11 @@ func main() {
 	fmt.Println("秒传链接，一行一个，按回车确认：")
 	for {
 		Link := ""
-		fmt.Scanln(&Link)
+		if Scanner.Scan() {
+			Link = Scanner.Text()
+		} else {
+			return
+		}
 		ContentMD5, SliceMD5, FileName, ContentLength, Err := ParseLink(Link)
 		if Err != nil {
 			fmt.Println(Err)
